@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - VeritasAI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <h1><i class="fas fa-shield-alt"></i> VeritasAI</h1>
+            <ul>
+                <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="/about"><i class="fas fa-info-circle"></i> About</a></li>
+                <li><a href="/verify"><i class="fas fa-search"></i> Verify</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <h1><i class="fas fa-info-circle"></i> About VeritasAI</h1>
+            
+            <div class="about-section">
+                <h2><i class="fas fa-robot"></i> What is VeritasAI?</h2>
+                <p>VeritasAI is an advanced AI-powered tool designed to help users identify potentially fake or misleading news articles. Our system uses state-of-the-art machine learning algorithms to analyze the content and structure of news articles to determine their authenticity with high accuracy.</p>
+            </div>
+
+            <div class="about-section">
+                <h2><i class="fas fa-cogs"></i> How it Works</h2>
+                <p>Our sophisticated system analyzes various features of news articles including:</p>
+                <ul>
+                    <li><strong>Language Patterns:</strong> Analyzes writing style, vocabulary complexity, and linguistic patterns</li>
+                    <li><strong>Content Structure:</strong> Examines article formatting, paragraph organization, and text flow</li>
+                    <li><strong>Sensationalist Language:</strong> Detects exaggerated claims, emotional manipulation, and clickbait techniques</li>
+                    <li><strong>Factual Consistency:</strong> Checks for logical coherence and factual accuracy indicators</li>
+                    <li><strong>Source Reliability:</strong> Evaluates source credibility and attribution patterns</li>
+                </ul>
+            </div>
+
+            <div class="about-section">
+                <h2><i class="fas fa-chart-line"></i> Model Performance</h2>
+                <p>Our machine learning model has been trained on a comprehensive dataset of verified news articles and has achieved high accuracy in detecting misinformation patterns. The system provides detailed confidence scores and probability breakdowns to help users understand the reliability of each prediction.</p>
+            </div>
+
+            <div class="about-section">
+                <h2><i class="fas fa-exclamation-triangle"></i> Important Disclaimer</h2>
+                <p>This tool is designed to assist in identifying potential fake news, but it should not be used as the sole source for determining the authenticity of news articles. Always verify information with multiple reliable sources and use critical thinking when evaluating news content. Our AI system is a helpful tool, but human judgment and fact-checking remain essential.</p>
+            </div>
+
+            <div class="about-section">
+                <h2><i class="fas fa-code"></i> Technology Stack</h2>
+                <p>This application is built using cutting-edge technologies:</p>
+                <ul>
+                    <li><strong>Python Flask:</strong> Modern web framework for the backend API</li>
+                    <li><strong>Machine Learning:</strong> Advanced NLP models for text analysis and classification and Logistic Regression for binary classification tasks</li>
+                    <li><strong>Natural Language Processing:</strong> Sophisticated algorithms for understanding text patterns</li>
+                    <li><strong>HTML5 & CSS3:</strong> Modern, responsive web design with glass morphism effects</li>
+                    <li><strong>JavaScript:</strong> Interactive user interface with real-time analysis</li>
+                    <li><strong>Font Awesome:</strong> Beautiful icons for enhanced user experience</li>
+                </ul>
+            </div>
+
+            <div class="about-section">
+                <h2><i class="fas fa-lightbulb"></i> Best Practices</h2>
+                <p>To get the most accurate results from our system:</p>
+                <ul>
+                    <li>Provide both the article title and full content when possible</li>
+                    <li>Use articles with substantial content (at least a few paragraphs)</li>
+                    <li>Consider the confidence score - higher scores indicate more reliable predictions</li>
+                    <li>Always cross-reference with multiple trusted sources</li>
+                    <li>Be skeptical of articles with very high or very low confidence scores</li>
+                </ul>
+            </div>
+
+            <div style="text-align: center; margin-top: 3rem;">
+                <a href="/verify" class="btn">
+                    <i class="fas fa-play"></i> Start Detecting Now
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p><i class="fas fa-heart" style="color: #e74c3c;"></i> Built by Prashant Mishra</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VeritasAI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <h1><i class="fas fa-shield-alt"></i> VeritasAI</h1>
+            <ul>
+                <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="/about"><i class="fas fa-info-circle"></i> About</a></li>
+                <li><a href="/verify"><i class="fas fa-search"></i> Verify</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <h1><i class="fas fa-robot"></i> AI-Powered Fake News Detection</h1>
+            <p>Protect yourself from misinformation with our advanced machine learning system. Get instant analysis and confidence scores for any news article.</p>
+            
+            <div style="text-align: center; margin: 3rem 0;">
+                <a href="/verify" class="btn">
+                    <i class="fas fa-play"></i> Start Detecting Now
+                </a>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 4rem;">
+                <div class="feature-card">
+                    <i class="fas fa-brain" style="font-size: 3rem; color: #667eea; margin-bottom: 1rem;"></i>
+                    <h3>AI Analysis</h3>
+                    <p>Advanced machine learning algorithms analyze text patterns and linguistic features.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-tachometer-alt" style="font-size: 3rem; color: #667eea; margin-bottom: 1rem;"></i>
+                    <h3>Instant Results</h3>
+                    <p>Get real-time analysis with confidence scores and detailed probability breakdowns.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-lock" style="font-size: 3rem; color: #667eea; margin-bottom: 1rem;"></i>
+                    <h3>Privacy First</h3>
+                    <p>Your data is processed securely and never stored permanently.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p><i class="fas fa-heart" style="color: #e74c3c;"></i> Built by Prashant Mishra</p>
+    </footer>
+</body>
+</html>

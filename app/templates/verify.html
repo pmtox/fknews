@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify News - VeritasAI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <h1><i class="fas fa-shield-alt"></i> VeritasAI</h1>
+            <ul>
+                <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="/about"><i class="fas fa-info-circle"></i> About</a></li>
+                <li><a href="/verify"><i class="fas fa-search"></i> Verify</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <h1><i class="fas fa-search"></i> Verify News Article</h1>
+            <p>Enter the news article title and content below to analyze its authenticity using our AI-powered detection system.</p>
+            
+            <form id="verifyForm">
+                <div class="form-group">
+                    <label for="title"><i class="fas fa-heading"></i> Article Title:</label>
+                    <textarea id="title" name="title" placeholder="Enter the news article title..." rows="2"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="content"><i class="fas fa-file-alt"></i> Article Content:</label>
+                    <textarea id="content" name="content" placeholder="Paste the full news article content here..." rows="8"></textarea>
+                </div>
+                
+                <div class="button-group">
+                    <button type="submit" class="btn" id="submitBtn">
+                        <span id="submitText"><i class="fas fa-search"></i> Analyze Article</span>
+                        <div id="loader" class="loading" style="display: none;"></div>
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="resetBtn" style="display: none;">
+                        <i class="fas fa-redo"></i> Analyze Another Article
+                    </button>
+                </div>
+            </form>
+
+            <div id="result" style="display: none;">
+                <h2><i class="fas fa-chart-bar"></i> Analysis Results</h2>
+                <div id="resultContent"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p><i class="fas fa-heart" style="color: #e74c3c;"></i> Built by Prashant Mishra</p>
+    </footer>
+
+    <script>
+        const verifyForm = document.getElementById('verifyForm');
+        const resultDiv = document.getElementById('result');
+        const resultContent = document.getElementById('resultContent');
+        const submitBtn = document.getElementById('submitBtn');
+        const submitText = document.getElementById('submitText');
+        const loader = document.getElementById('loader');
+        const resetBtn = document.getElementById('resetBtn');
+        const titleInput = document.getElementById('title');
+        const contentInput = document.getElementById('content');
+
+        verifyForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const title = titleInput.value.trim();
+            const content = contentInput.value.trim();
+            
+            if (!title && !content) {
+                showAlert('Please enter either a title or content to analyze.', 'error');
+                return;
+            }
+
+            // Show loading state
+            submitBtn.disabled = true;
+            submitText.style.display = 'none';
+            loader.style.display = 'inline-block';
+            resultDiv.style.display = 'none';
+            resetBtn.style.display = 'none';
+
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        title: title,
+                        text: content
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                displayResults(data);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('An error occurred while analyzing the article. Please try again.', 'error');
+            } finally {
+                // Hide loading state
+                submitBtn.disabled = false;
+                submitText.style.display = 'inline';
+                loader.style.display = 'none';
+            }
+        });
+
+        // Reset button functionality
+        resetBtn.addEventListener('click', () => {
+            resetForm();
+        });
+
+        function resetForm() {
+            // Clear form inputs
+            titleInput.value = '';
+            contentInput.value = '';
+            
+            // Hide results and reset button
+            resultDiv.style.display = 'none';
+            resetBtn.style.display = 'none';
+            
+            // Focus on title input for better UX
+            titleInput.focus();
+            
+            // Show success message
+            showAlert('Form cleared! You can now analyze another article.', 'info');
+        }
+
+        function displayResults(data) {
+            const confidence = (data.confidence * 100).toFixed(1);
+            const isTrue = data.prediction === 'True News';
+            
+            let statusIcon = isTrue ? 'fas fa-check-circle' : 'fas fa-times-circle';
+            let statusColor = isTrue ? '#28a745' : '#dc3545';
+            let statusText = isTrue ? 'Likely True News' : 'Likely Fake News';
+            
+            // Generate reasons HTML
+            let reasonsHTML = '';
+            if (data.reasons && data.reasons.length > 0) {
+                reasonsHTML = `
+                    <div class="reasons-section">
+                        <h4><i class="fas fa-search-plus"></i> Analysis Reasons</h4>
+                        <div class="reasons-grid">
+                            ${data.reasons.map(reason => `
+                                <div class="reason-card reason-${reason.type}">
+                                    <div class="reason-header">
+                                        <i class="fas fa-${getReasonIcon(reason.type)}"></i>
+                                        <span class="reason-text">${reason.text}</span>
+                                    </div>
+                                    <p class="reason-explanation">${reason.explanation}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            resultContent.innerHTML = `
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <i class="${statusIcon}" style="font-size: 4rem; color: ${statusColor}; margin-bottom: 1rem;"></i>
+                    <h3 style="color: ${statusColor}; font-size: 1.5rem; margin-bottom: 1rem;">${statusText}</h3>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                    <div class="stat-card">
+                        <h4><i class="fas fa-percentage"></i> Confidence</h4>
+                        <p style="font-size: 2rem; font-weight: bold; color: #667eea;">${confidence}%</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4><i class="fas fa-thumbs-up"></i> True Probability</h4>
+                        <p style="font-size: 2rem; font-weight: bold; color: #28a745;">${(data.true_probability * 100).toFixed(1)}%</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4><i class="fas fa-thumbs-down"></i> Fake Probability</h4>
+                        <p style="font-size: 2rem; font-weight: bold; color: #dc3545;">${(data.fake_probability * 100).toFixed(1)}%</p>
+                    </div>
+                </div>
+                
+                ${reasonsHTML}
+                
+                <div class="recommendation">
+                    <h4><i class="fas fa-lightbulb"></i> Recommendation</h4>
+                    <p>${getRecommendation(data.prediction, confidence)}</p>
+                </div>
+            `;
+            
+            resultDiv.style.display = 'block';
+            resetBtn.style.display = 'inline-block';
+            resultDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function getReasonIcon(type) {
+            const icons = {
+                'warning': 'exclamation-triangle',
+                'positive': 'check-circle',
+                'confidence': 'shield-alt',
+                'uncertainty': 'question-circle'
+            };
+            return icons[type] || 'info-circle';
+        }
+
+        function getRecommendation(prediction, confidence) {
+            if (confidence < 60) {
+                return "The analysis shows mixed signals. We recommend fact-checking with multiple reliable sources and looking for additional context before forming conclusions.";
+            } else if (prediction === "True News") {
+                return "This article appears to be authentic based on our analysis. However, always verify with multiple reliable sources and maintain critical thinking.";
+            } else {
+                return "This article shows characteristics commonly associated with fake news. We strongly recommend fact-checking with trusted sources and being cautious about sharing this content.";
+            }
+        }
+
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.innerHTML = `
+                <i class="fas fa-${type === 'error' ? 'exclamation-triangle' : 'info-circle'}"></i>
+                ${message}
+            `;
+            
+            document.body.appendChild(alertDiv);
+            
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
