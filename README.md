@@ -6,6 +6,7 @@ Hello! I’m excited to share my first AI/ML project, where I built a Fake News 
 
 Project Overview This model is designed to classify news articles as real or fake using:
 
+
 Vectorization – Converting text data into numerical format.
 Logistic Regression – Applying a supervised learning algorithm for classification.
 Tech Stack
